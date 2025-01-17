@@ -9,7 +9,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "fuuder",
+						"name": "funder",
 						"type": "address"
 					}
 				],
@@ -49,6 +49,13 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "wuthdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -87,11 +94,11 @@
 			]
 		},
 		"contracts/FundMe.sol": {
-			"keccak256": "0xaf81c71b9f4da611f3355f7b4e228fa3cb6e35def7811f747cfb7b6d0796ee91",
+			"keccak256": "0xbbcb3d72f5f467ef0bd3dcd6cf657dd2b3cb2366380d490f33582fd520c4fa6d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dba3284235276e133ccb2c1ff420123043d25557577d709c9a3128aea9da6995",
-				"dweb:/ipfs/QmZxNGAJ3h3SSa46wL1xSHctxKFwKGCD4E1NBWq3TWH4Pd"
+				"bzz-raw://460c143396c8a4929cb7a484d59003ee33c0d911c325555332f451e0cc22b65b",
+				"dweb:/ipfs/QmPc1C1XpV68VXTSzWPG2bhTonz7VHNcKQ7Lrb8shSAbEp"
 			]
 		},
 		"libraries/PriceConverter.sol": {
