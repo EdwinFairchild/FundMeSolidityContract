@@ -1,20 +1,22 @@
 //SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.18;
- import {PriceConverter} from "../libraries/PriceConverter.sol";
+import {PriceConverter} from "./PriceConverter.sol";
+
+error NotOwner();
 
 contract FundMe{
     using PriceConverter for uint256;
-    uint256 minFundAmountUSD = 5;
+    uint256 constant minFundAmountUSD = 5;
 
     //keep tract of fnders
     address[] public funders;
     // map an address type to a uint256 type
     mapping(address funder => uint256 amountFunded) public addressToAmountFunded;
-    address public owner;
+    address public immutable i_owner;
 
     constructor (){
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     function fund()  payable public{
@@ -38,7 +40,10 @@ contract FundMe{
 }
 
     modifier ownerOnly(){
-        require(msg.sender == owner, "You are not the owner");
+        // require(msg.sender != i_owner, "You are not the owner");
+        if(msg.sender != i_owner){
+            revert NotOwner();
+        }
         _;
     }
 
