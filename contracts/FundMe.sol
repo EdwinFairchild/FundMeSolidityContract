@@ -11,7 +11,11 @@ contract FundMe{
     address[] public funders;
     // map an address type to a uint256 type
     mapping(address funder => uint256 amountFunded) public addressToAmountFunded;
-    
+    address public owner;
+
+    constructor (){
+        owner = msg.sender;
+    }
 
     function fund()  payable public{
         // msg.value is an uin256 and it is automatically passed as first argument to getEthToUSDRate
@@ -21,14 +25,27 @@ contract FundMe{
 
     }
 
-    function wuthdraw() public {
-        for( uint256 funderIndex = 0 ; funderIndex < funders.length ; funderIndex++){
-            // reset the amount funded associated with the funder
-            address funder = funders[funderIndex];
-            addressToAmountFunded[funder] = 0;
+    function withdraw() public funderOnly {
+    // check how much the caller has funded
+    uint256 fundedAmount = addressToAmountFunded[msg.sender];
+   
+    // reset the caller's funded amount
+    addressToAmountFunded[msg.sender] = 0;
 
-        }
+    // transfer the funds back to the caller
+    (bool success, ) = payable(msg.sender).call{value: fundedAmount}("");
+    require(success, "Withdraw failed");
+}
+
+    modifier ownerOnly(){
+        require(msg.sender == owner, "You are not the owner");
+        _;
     }
+
+    modifier funderOnly() {
+    require(addressToAmountFunded[msg.sender] > 0, "You have no funds to withdraw");
+    _;
+}
 
 
 }
