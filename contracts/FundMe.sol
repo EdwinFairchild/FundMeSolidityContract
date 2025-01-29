@@ -1,22 +1,20 @@
 //SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.18;
-import {PriceConverter} from "./PriceConverter.sol";
-
-error NotOwner();
+ import {PriceConverter} from "../libraries/PriceConverter.sol";
 
 contract FundMe{
     using PriceConverter for uint256;
-    uint256 constant minFundAmountUSD = 5;
+    uint256 minFundAmountUSD = 5;
 
     //keep tract of fnders
     address[] public funders;
     // map an address type to a uint256 type
     mapping(address funder => uint256 amountFunded) public addressToAmountFunded;
-    address public immutable i_owner;
+    address public owner;
 
     constructor (){
-        i_owner = msg.sender;
+        owner = msg.sender;
     }
 
     function fund()  payable public{
@@ -29,21 +27,18 @@ contract FundMe{
 
     function withdraw() public funderOnly {
     // check how much the caller has funded
-    uint256 fundedAmount = addressToAmountFunded[msg.sender];
-   
-    // reset the caller's funded amount
-    addressToAmountFunded[msg.sender] = 0;
+        uint256 fundedAmount = addressToAmountFunded[msg.sender];
+    
+        // reset the caller's funded amount
+        addressToAmountFunded[msg.sender] = 0;
 
-    // transfer the funds back to the caller
-    (bool success, ) = payable(msg.sender).call{value: fundedAmount}("");
-    require(success, "Withdraw failed");
-}
+        // transfer the funds back to the caller
+        (bool success, ) = payable(msg.sender).call{value: fundedAmount}("");
+        require(success, "Withdraw failed");
+    }
 
     modifier ownerOnly(){
-        // require(msg.sender != i_owner, "You are not the owner");
-        if(msg.sender != i_owner){
-            revert NotOwner();
-        }
+        require(msg.sender == owner, "You are not the owner");
         _;
     }
 
